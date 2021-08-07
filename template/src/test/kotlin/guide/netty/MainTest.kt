@@ -1,4 +1,4 @@
-package com.github.template
+package guide.netty
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

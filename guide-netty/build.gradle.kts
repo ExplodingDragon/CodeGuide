@@ -6,17 +6,12 @@ plugins {
 }
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-val compileKotlin: KotlinCompile by tasks
-val compileJava: JavaCompile by tasks
-compileJava.destinationDirectory.set(compileKotlin.destinationDirectory.get())
 
-java {
-    modularity.inferModulePath.set(true)
-}
 
 dependencies {
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib"))
+    implementation("io.netty:netty-all:4.1.66.Final")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
     testImplementation("org.junit.platform:junit-platform-launcher:1.6.2")
 }

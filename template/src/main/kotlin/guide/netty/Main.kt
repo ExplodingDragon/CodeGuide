@@ -1,4 +1,4 @@
-package com.github.template
+package guide.netty
 
 
 class Main

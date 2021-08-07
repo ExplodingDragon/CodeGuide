@@ -9,9 +9,10 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioSocketChannel
+import io.netty.handler.codec.ByteToMessageDecoder
 import java.text.SimpleDateFormat
 
-class TimeClient {
+class DecodeTimeClient {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
@@ -22,12 +23,21 @@ class TimeClient {
             bootstrap.option(ChannelOption.SO_KEEPALIVE, true)
             bootstrap.handler(object : ChannelInitializer<SocketChannel>() {
                 override fun initChannel(ch: SocketChannel) {
-                    ch.pipeline().addLast(TimeClientHandler())
+                    ch.pipeline().addLast(TimeDecoder(), TimeClientHandler())
                 }
             })
             val sync = bootstrap.connect("127.0.0.1", 8088).sync()
             sync.channel().closeFuture().sync()
             workGroup.shutdownGracefully()
+        }
+    }
+
+    class TimeDecoder : ByteToMessageDecoder() {
+        override fun decode(ctx: ChannelHandlerContext, input: ByteBuf, out: MutableList<Any>) {
+            if (input.readableBytes() < 4) {
+                return
+            }
+            out.add(input.readBytes(4))
         }
     }
 
